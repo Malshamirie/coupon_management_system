@@ -22,7 +22,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-box">
+                <div class="card-body">
 
                     {!! Form::model($role, ['method' => 'PATCH','route' => ['roles.update', $role->id]]) !!}
                     <div class="row">

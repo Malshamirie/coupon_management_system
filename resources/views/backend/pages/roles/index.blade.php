@@ -65,6 +65,9 @@
                                         @can('add_role')
                                             <a class="btn btn-purple btn-xs" href="{{ route('roles.show',$role->id) }}">{{trans('back.Show')}}  </a>
                                         @endcan
+                                        @can('edit_role')
+                                                <a class="btn btn-secondary btn-xs" href="{{ route('roles.edit',$role->id) }}"> {{trans('back.edit')}} </a>
+                                            @endcan
 
                                         @else
                                             @can('add_role')

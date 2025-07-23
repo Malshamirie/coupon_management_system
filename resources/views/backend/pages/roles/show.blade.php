@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-box">
+                <div class="card-body">
 
                     <div class="box-head pb-4">
                         <strong>{{trans('back.name')}} : </strong>
