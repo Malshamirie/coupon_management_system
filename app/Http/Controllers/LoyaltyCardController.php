@@ -36,9 +36,13 @@ class LoyaltyCardController extends Controller
     $data['slug'] = Str::slug($request->name);
     $data['is_active'] = $request->has('is_active');
 
-    if ($request->hasFile('image')) {
-      $data['image'] = $request->file('image')->store('loyalty_cards', 'public');
+    if ($image = $request->file('image')){
+        $path = 'images/loyalty_cards/';
+        $filename = time().$image->getClientOriginalName();
+        $image->move($path, $filename);
+        $data['image'] = $path.$filename;
     }
+    
 
     LoyaltyCard::create($data);
     toast('تم الإضافة بنجاح', 'success');
@@ -58,15 +62,12 @@ class LoyaltyCardController extends Controller
     $data = $request->all();
     $data['slug'] = Str::slug($request->name);
     $data['is_active'] = $request->has('is_active');
-
-            if ($request->hasFile('image')) {
-            // حذف الصورة القديمة
-            if ($loyaltyCard->image) {
-                Storage::disk('public')->delete($loyaltyCard->image);
-            }
-            $data['image'] = $request->file('image')->store('loyalty_cards', 'public');
-        }
-
+    if ($image = $request->file('image')){
+        $path = 'images/loyalty_cards/';
+        $filename = time().$image->getClientOriginalName();
+        $image->move($path, $filename);
+        $data['image'] = $path.$filename;
+    }
     $loyaltyCard->update($data);
     toast('تم التعديل بنجاح', 'success');
     return redirect()->back();

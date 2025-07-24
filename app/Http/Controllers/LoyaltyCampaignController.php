@@ -86,9 +86,13 @@ class LoyaltyCampaignController extends Controller
 
         $data = $validator->validated();
 
-        // معالجة الصورة
-        if ($request->hasFile('page_logo')) {
-            $data['page_logo'] = $request->file('page_logo')->store('loyalty_campaigns', 'public');
+       
+
+        if ($image = $request->file('page_logo')){
+            $path = 'images/loyalty_campaigns/';
+            $filename = time().$image->getClientOriginalName();
+            $image->move($path, $filename);
+            $data['page_logo'] = $path.$filename;
         }
 
         LoyaltyCampaign::create($data);
@@ -137,14 +141,13 @@ class LoyaltyCampaignController extends Controller
 
         $data = $validator->validated();
 
-        // معالجة الصورة
-        if ($request->hasFile('page_logo')) {
-            // حذف الصورة القديمة
-            if ($loyaltyCampaign->page_logo) {
-                Storage::disk('public')->delete($loyaltyCampaign->page_logo);
-            }
-            $data['page_logo'] = $request->file('page_logo')->store('loyalty_campaigns', 'public');
+        if ($image = $request->file('page_logo')){
+            $path = 'images/loyalty_campaigns/';
+            $filename = time().$image->getClientOriginalName();
+            $image->move($path, $filename);
+            $data['page_logo'] = $path.$filename;
         }
+
 
         $loyaltyCampaign->update($data);
 
