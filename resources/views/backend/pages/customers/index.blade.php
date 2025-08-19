@@ -28,16 +28,31 @@
         @endcan
 
         @can('customers')
-            <div class="col-md-6 mb-1 ">
+            <div class="col-md-6 mb-1">
                 <form action="{{ route('admin.customers.index') }}" method="GET" role="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control " name="query" value="{{ old('query', request()->input('query')) }}" placeholder="{{ trans('back.search') }}">
-                        <button class="btn btn-purple ml-1" type="submit" title="Search">
-                            <span class="fas fa-search"></span>
-                        </button>
-                        <a href="{{ route('admin.customers.index') }}" class="btn btn-success ml-1" title="Reload">
-                            <span class="fas fa-sync-alt"></span>
-                        </a>
+                    <div class="row">
+                       
+                        <div class="col-md-6">
+                            <select name="loyalty_container_id" class="form-control">
+                                <option value="">{{ __('back.filter_by_loyalty_container') }} {{ __('back.all') }}</option>
+                                @foreach ($loyaltyContainers as $loyaltyContainer)
+                                    <option value="{{ $loyaltyContainer->id }}" {{ request('loyalty_container_id') == $loyaltyContainer->id ? 'selected' : '' }}>
+                                        {{ $loyaltyContainer->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="query" value="{{ old('query', request()->input('query')) }}" placeholder="{{ trans('back.search') }}">
+                                <button class="btn btn-purple" type="submit" title="Search">
+                                    <span class="fas fa-search"></span>
+                                </button>
+                                <a href="{{ route('admin.customers.index') }}" class="btn btn-success" title="Reload">
+                                    <span class="fas fa-sync-alt"></span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -57,7 +72,7 @@
                                 <th>{{ __('back.phone') }}</th>
                                 <th>{{ __('back.email') }}</th>
                                 <th>{{ __('back.address') }}</th>
-                                <th>{{ __('back.container') }}</th>
+                                <th>{{ __('back.loyalty_container') }}</th>
                                 <th>{{ __('back.Created_at') }}</th>
                                 <th>{{ __('back.actions') }}</th>
                             </tr>
@@ -71,8 +86,8 @@
                                     <td>{{ $customer->phone }}</td>
                                     <td>{{ $customer->email ?? '-' }}</td>
                                     <td>{{ $customer->address ?? '-' }}</td>
-                                    <td>{{ $customer->container->name ?? '' }}</td>
-                                    <td>{{ $customer->created_at->format('Y-m-d') }}</td>
+                                    <td>{{ $customer->loyaltyContainer->name ?? '-' }}</td>
+                                    <td>{{ $customer->created_at }}</td>
                                     <td>
                                         @can('edit_customer')
                                         <a href="" class="btn btn-success btn-xs ml-1" data-bs-toggle="modal" data-bs-target="#edit_customer{{$customer->id}}">

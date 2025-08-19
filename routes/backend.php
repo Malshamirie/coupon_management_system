@@ -1,24 +1,26 @@
 <?php
 
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\CouponUserController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\LoyaltyCampaignController;
+use App\Http\Controllers\LoyaltyCampaignRecipientController;
+use App\Http\Controllers\LoyaltyCardController;
+use App\Http\Controllers\LoyaltyCardRequestController;
+use App\Http\Controllers\LoyaltyContainerController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\LoyaltyCardController;
-use App\Http\Controllers\LoyaltyCampaignController;
-use App\Http\Controllers\CityController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\BranchController;
-use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use App\Http\Controllers\LoyaltyCampaignRecipientController;
-use App\Http\Controllers\LoyaltyCardRequestController;
+
 
 
 
@@ -59,6 +61,9 @@ Route::group(
             // حملات الولاء
             Route::resource('loyalty_cards', LoyaltyCardController::class);
             Route::resource('loyalty_campaigns', LoyaltyCampaignController::class);
+            Route::resource('loyalty_containers', LoyaltyContainerController::class);
+            Route::post('loyalty_containers/{id}/toggle-status', [LoyaltyContainerController::class, 'toggleStatus'])->name('loyalty_containers.toggle-status');
+            Route::get('loyalty_containers/{id}/campaigns', [LoyaltyContainerController::class, 'campaigns'])->name('loyalty_containers.campaigns');
             Route::post('loyalty_campaigns/{loyaltyCampaign}/toggle-status', [LoyaltyCampaignController::class, 'toggleStatus'])->name('loyalty_campaigns.toggle-status');
             Route::get('loyalty_campaigns/{loyaltyCampaign}/customers', [LoyaltyCampaignController::class, 'customers'])->name('loyalty_campaigns.customers');
             Route::get('loyalty_campaigns/{loyaltyCampaign}/send', [LoyaltyCampaignController::class, 'sendCampaign'])->name('loyalty_campaigns.send');

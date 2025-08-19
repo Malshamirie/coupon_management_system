@@ -1,4 +1,3 @@
-<!-- ========== Left Sidebar Start ========== -->
 <div class="left-side-menu">
 
   <div class="h-100" data-simplebar>
@@ -109,17 +108,23 @@
             </a>
           </li>
         @endcan
+        <li>
+          <a href="{{ route('usercodes') }}">
+            <i class="mdi mdi-account-multiple-plus-outline"></i>
+            <span> {{ trans('back.usercoupons') }} </span>
+          </a>
+        </li>
 
-        {{-- حملات الولاء --}}
-        @can('loyalty_cards')
-          <li>
-            <a href="#loyalty" data-bs-toggle="collapse">
-              <i class="mdi mdi-credit-card-outline"></i>
-              <span>{{ trans('back.loyalty_campaigns') }}</span>
-              <span class="menu-arrow"></span>
-            </a>
-            <div class="collapse" id="loyalty">
-              <ul class="nav-second-level">
+        <hr>
+
+        <li> <a> <span class="" style="font-size: 15px; color: #8f8e8e;"> {{ trans('back.section_loyalty_campaigns') }} </span> </a> </li>
+
+
+                @can('loyalty_containers')
+                  <li><a
+                      href="{{ route('admin.loyalty_containers.index') }}"><span>{{ trans('back.loyalty_containers') }}</span></a>
+                  </li>
+                @endcan
                 @can('loyalty_cards')
                   <li><a
                       href="{{ route('admin.loyalty_cards.index') }}"><span>{{ trans('back.loyalty_cards') }}</span></a>
@@ -155,17 +160,9 @@
                 @can('customers')
                   <li><a href="{{ route('admin.customers.index') }}"><span>{{ trans('back.customers') }}</span></a></li>
                 @endcan
-              </ul>
-            </div>
-          </li>
-        @endcan
+             
 
-        <li>
-          <a href="{{ route('usercodes') }}">
-            <i class="mdi mdi-account-multiple-plus-outline"></i>
-            <span> {{ trans('back.usercoupons') }} </span>
-          </a>
-        </li>
+        
 
         {{-- اعدادات النظام --}}
         @can('setting')

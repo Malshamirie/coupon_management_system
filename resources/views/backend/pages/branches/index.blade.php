@@ -66,7 +66,7 @@
                     <td>{{ $branch->city->name ?? '' }}</td>
                     <td>{{ $branch->area }}</td>
                     <td>{{ $branch->group->name ?? '' }}</td>
-                    <td>{{ $branch->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $branch->created_at }}</td>
                     <td>
                       @can('edit_branch')
                         <a href="" class="btn btn-success btn-xs ml-1" data-bs-toggle="modal"

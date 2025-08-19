@@ -11,9 +11,9 @@
   <!-- App favicon -->
   <link rel="shortcut icon" href="{{ asset(App\Models\Setting::first()->logo) }}">
 
-  {{-- <link href="https://fonts.adobe.com/fonts/jali-arabic-variable#fonts-section" rel="stylesheet"> --}}
-  <!-- dropify -->
-  {{-- <link href="{{asset('backend/assets/libs/dropify/dropify.min.css')}}" rel="stylesheet" type="text/css" /> --}}
+
+      <!-- Google Font: Cairo -->
+      <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700&display=swap" rel="stylesheet">
 
 
   @if (App::getLocale() == 'ar')

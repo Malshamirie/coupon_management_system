@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             CreateAdminUserSeeder::class,
             ContainerSeeder::class,
+            LoyaltyContainerSeeder::class, // إضافة seeder الحاويات الجديدة
             // ProductCodesSeeder::class,
             LoyaltyCardSeeder::class,
             CustomerSeeder::class,

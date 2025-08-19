@@ -56,8 +56,8 @@
                     <td>{{ $customer->phone }}</td>
                     <td>{{ $customer->email ?? '--' }}</td>
                     <td>{{ $customer->address ?? '--' }}</td>
-                    <td>{{ $customer->container->name ?? '--' }}</td>
-                    <td>{{ $customer->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $customer->loyaltyContainer->name ?? '--' }}</td>
+                    <td>{{ $customer->created_at }}</td>
                     <td>
                       @can('edit_customer')
                         <a href="{{ route('admin.customers.edit', $customer->id) }}" class="btn btn-success btn-xs ml-1">

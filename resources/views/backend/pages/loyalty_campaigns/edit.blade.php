@@ -40,12 +40,12 @@
                         
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="container_id">{{ __('back.select_container') }} <span class="text-danger">*</span></label>
-                                <select name="container_id" id="container_id" class="form-control" required>
+                                <label for="loyalty_container_id">{{ __('back.select_container') }} <span class="text-danger">*</span></label>
+                                <select name="loyalty_container_id" id="loyalty_container_id" class="form-control" required>
                                     <option value="">{{ __('back.select_container') }}</option>
-                                    @foreach($containers as $container)
-                                        <option value="{{ $container->id }}" {{ old('container_id', $loyaltyCampaign->container_id) == $container->id ? 'selected' : '' }}>
-                                            {{ $container->name }}
+                                    @foreach($loyaltyContainers as $loyaltyContainer)
+                                        <option value="{{ $loyaltyContainer->id }}" {{ old('loyalty_container_id', $loyaltyCampaign->loyalty_container_id) == $loyaltyContainer->id ? 'selected' : '' }}>
+                                            {{ $loyaltyContainer->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -78,7 +78,7 @@
                             <div class="form-group">
                                 <label for="start_date">{{ __('back.start_date') }} <span class="text-danger">*</span></label>
                                 <input type="date" name="start_date" id="start_date" class="form-control" 
-                                       value="{{ old('start_date', $loyaltyCampaign->start_date->format('Y-m-d')) }}" required>
+                                       value="{{ old('start_date', $loyaltyCampaign->start_date) }}" required>
                                 <div class="invalid-feedback" id="start_date_error"></div>
                             </div>
                         </div>
@@ -87,7 +87,7 @@
                             <div class="form-group">
                                 <label for="end_date">{{ __('back.end_date') }} <span class="text-danger">*</span></label>
                                 <input type="date" name="end_date" id="end_date" class="form-control" 
-                                       value="{{ old('end_date', $loyaltyCampaign->end_date->format('Y-m-d')) }}" required>
+                                       value="{{ old('end_date', $loyaltyCampaign->end_date) }}" required>
                                 <div class="invalid-feedback" id="end_date_error"></div>
                             </div>
                         </div>

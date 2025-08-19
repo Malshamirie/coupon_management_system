@@ -27,7 +27,7 @@ class LoyaltyCardController extends Controller
   {
     $request->validate([
       'name' => 'required|string|max:255',
-      'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:width=800,height=800',
+      'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'description' => 'nullable|string',
       'is_active' => 'boolean'
     ]);
@@ -53,7 +53,7 @@ class LoyaltyCardController extends Controller
   {
     $request->validate([
       'name' => 'required|string|max:255',
-      'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048|dimensions:width=800,height=800',
+      'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'description' => 'nullable|string',
       'is_active' => 'boolean'
     ]);

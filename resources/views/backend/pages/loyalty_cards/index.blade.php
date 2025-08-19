@@ -41,7 +41,7 @@
       <div class="card">
         <div class="card-body">
           <div class="table-responsive">
-            <table id="" class="table table-bordered table-sm">
+            <table id="" class="table table-bordered table-sm ">
               <thead>
                 <tr class="text-center">
                   <th>#</th>
@@ -56,16 +56,11 @@
 
               <tbody>
                 @foreach ($loyaltyCards as $card)
-                  <tr>
+                  <tr class="text-center">
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $card->name }}</td>
                     <td class="text-center">
-                      @if ($card->image)
-                        <img src="{{ $card->image_url }}" alt="{{ $card->name }}" class="img-thumbnail"
-                          style="max-width: 50px; max-height: 50px;">
-                      @else
-                        <span class="text-muted">{{ __('back.no_image') }}</span>
-                      @endif
+                        <img src="{{ asset($card->image??'no_image.png') }}" alt="{{ $card->name }}" class="img-thumbnail avatar-sm">
                     </td>
                     <td>{{ Str::limit($card->description, 50) }}</td>
                     <td>
@@ -73,7 +68,7 @@
                         {{ $card->status_text }}
                       </span>
                     </td>
-                    <td>{{ $card->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $card->created_at}}</td>
                     <td>
                       @can('edit_loyalty_card')
                         <a href="" class="btn btn-success btn-xs ml-1" data-bs-toggle="modal"

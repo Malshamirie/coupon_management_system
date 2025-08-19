@@ -2,28 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\LoyaltyCampaignExport;
-use App\Jobs\SendWhatsAppMessageJob;
-use App\Models\Container;
 use App\Models\Customer;
-use App\Models\LoyaltyCampaign;
+use App\Models\Container;
 use App\Models\LoyaltyCard;
-use Illuminate\Console\View\Components\Task;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LoyaltyCampaign;
+use App\Models\LoyaltyContainer;
+use App\Jobs\SendWhatsAppMessageJob;
 use Illuminate\Support\Facades\Http;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LoyaltyCampaignExport;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Console\View\Components\Task;
 
 class LoyaltyCampaignController extends Controller
 {
     public function index(Request $request)
     {
-        $campaigns = LoyaltyCampaign::with(['loyaltyCard', 'container']);
+        $campaigns = LoyaltyCampaign::with(['loyaltyCard', 'loyaltyContainer']);
 
         // فلترة حسب نوع البطاقة
         if ($request->filled('card_type')) {
             $campaigns->byCardType($request->card_type);
+        }
+
+        // فلترة حسب حاوية الولاء
+        if ($request->filled('loyalty_container_id')) {
+            $campaigns->where('loyalty_container_id', $request->loyalty_container_id);
         }
 
         // فلترة حسب تاريخ الإنشاء
@@ -36,7 +43,16 @@ class LoyaltyCampaignController extends Controller
             $campaigns->orderBy('start_date', $request->start_date_sort);
         }
 
-        // البحث في اسم الحملة
+        // البحث في اسم الحملة أو اسم المدير
+        if ($request->filled('search_campaign')) {
+            $search = $request->input('search_campaign');
+            $campaigns->where(function($q) use ($search) {
+                $q->where('campaign_name', 'LIKE', "%{$search}%")
+                  ->orWhere('manager_name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // البحث العام في اسم الحملة (للتوافق مع البحث الموجود)
         if ($request->filled('query')) {
             $search = $request->input('query');
             $campaigns->where('campaign_name', 'LIKE', "%{$search}%")
@@ -47,23 +63,24 @@ class LoyaltyCampaignController extends Controller
 
         $campaigns = $campaigns->orderBy('id', 'desc')->paginate(10);
         $loyaltyCards = LoyaltyCard::all();
+        $loyaltyContainers = LoyaltyContainer::where('is_active', true)->get();
 
-        return view('backend.pages.loyalty_campaigns.index', compact('campaigns', 'loyaltyCards'));
+        return view('backend.pages.loyalty_campaigns.index', compact('campaigns', 'loyaltyCards', 'loyaltyContainers'));
     }
 
     public function create()
     {
         $loyaltyCards = LoyaltyCard::where('is_active', true)->get();
-        $containers = Container::all();
+        $loyaltyContainers = LoyaltyContainer::where('is_active', true)->get();
 
-        return view('backend.pages.loyalty_campaigns.create', compact('loyaltyCards', 'containers'));
+        return view('backend.pages.loyalty_campaigns.create', compact('loyaltyCards', 'loyaltyContainers'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'loyalty_card_id' => 'required|exists:loyalty_cards,id',
-            'container_id' => 'required|exists:containers,id',
+            'loyalty_container_id' => 'required|exists:loyalty_containers,id',
             'campaign_name' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
@@ -81,12 +98,11 @@ class LoyaltyCampaignController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            toast($validator->errors()->first(), 'error');
+            return redirect()->back();
         }
 
         $data = $validator->validated();
-
-       
 
         if ($image = $request->file('page_logo')){
             $path = 'images/loyalty_campaigns/';
@@ -95,6 +111,7 @@ class LoyaltyCampaignController extends Controller
             $data['page_logo'] = $path.$filename;
         }
 
+        $data['slug'] = Str::slug($data['campaign_name']).'-'.time();
         LoyaltyCampaign::create($data);
         toast('تم الإضافة بنجاح', 'success');
         return redirect()->route('admin.loyalty_campaigns.index');
@@ -102,23 +119,23 @@ class LoyaltyCampaignController extends Controller
 
     public function show(LoyaltyCampaign $loyaltyCampaign)
     {
-        $loyaltyCampaign->load(['loyaltyCard', 'container', 'customers']);
+        $loyaltyCampaign->load(['loyaltyCard', 'loyaltyContainer', 'customers']);
         return view('backend.pages.loyalty_campaigns.show', compact('loyaltyCampaign'));
     }
 
     public function edit(LoyaltyCampaign $loyaltyCampaign)
     {
         $loyaltyCards = LoyaltyCard::where('is_active', true)->get();
-        $containers = Container::all();
+        $loyaltyContainers = LoyaltyContainer::where('is_active', true)->get();
 
-        return view('backend.pages.loyalty_campaigns.edit', compact('loyaltyCampaign', 'loyaltyCards', 'containers'));
+        return view('backend.pages.loyalty_campaigns.edit', compact('loyaltyCampaign', 'loyaltyCards', 'loyaltyContainers'));
     }
 
     public function update(Request $request, LoyaltyCampaign $loyaltyCampaign)
     {
         $validator = Validator::make($request->all(), [
             'loyalty_card_id' => 'required|exists:loyalty_cards,id',
-            'container_id' => 'required|exists:containers,id',
+            'loyalty_container_id' => 'required|exists:loyalty_containers,id',
             'campaign_name' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
@@ -157,14 +174,9 @@ class LoyaltyCampaignController extends Controller
 
     public function destroy(LoyaltyCampaign $loyaltyCampaign)
     {
-        // حذف الصورة
-        if ($loyaltyCampaign->page_logo) {
-            Storage::disk('public')->delete($loyaltyCampaign->page_logo);
-        }
-
         $loyaltyCampaign->delete();
-
-        return response()->json(['message' => trans('back.campaign_deleted_successfully')]);
+        toast('تم الحذف بنجاح', 'success');
+        return redirect()->back();
     }
 
     public function toggleStatus(LoyaltyCampaign $loyaltyCampaign)
@@ -179,7 +191,7 @@ class LoyaltyCampaignController extends Controller
 
     public function customers(LoyaltyCampaign $loyaltyCampaign)
     {
-        $customers = $loyaltyCampaign->container->customers()->paginate(10);
+        $customers = $loyaltyCampaign->loyaltyContainer->customers()->paginate(10);
         return view('backend.pages.loyalty_campaigns.customers', compact('loyaltyCampaign', 'customers'));
     }
 
@@ -188,12 +200,12 @@ class LoyaltyCampaignController extends Controller
         // إذا كان طلب معاينة
         if ($request->has('preview') && $request->preview) {
             $customerIds = $request->input('customer_ids', []);
-            $customers = $loyaltyCampaign->container->customers()->whereIn('id', $customerIds)->get();
+            $customers = $loyaltyCampaign->loyaltyContainer->customers()->whereIn('id', $customerIds)->get();
 
             return view('backend.pages.loyalty_campaigns.preview', compact('loyaltyCampaign', 'customers'));
         }
 
-        $customers = $loyaltyCampaign->container ? $loyaltyCampaign->container->customers : collect();
+        $customers = $loyaltyCampaign->loyaltyContainer ? $loyaltyCampaign->loyaltyContainer->customers : collect();
         return view('backend.pages.loyalty_campaigns.send', compact('loyaltyCampaign', 'customers'));
     }
 
@@ -201,7 +213,7 @@ class LoyaltyCampaignController extends Controller
     {
 
         $customerIds = $request->input('customer_ids', []);
-        $customers = $loyaltyCampaign->container->customers()->whereIn('id', $customerIds)->get();
+        $customers = $loyaltyCampaign->loyaltyContainer->customers()->whereIn('id', $customerIds)->get();
 
         // إرسال الحملة للعملاء المحددين عبر الطابور (Queue)
         foreach ($customers as $customer) {
@@ -244,7 +256,7 @@ class LoyaltyCampaignController extends Controller
 
     public function landingPage($campaignId)
     {
-        $campaign = LoyaltyCampaign::where('id', $campaignId)->firstOrFail();
+        $campaign = LoyaltyCampaign::where('slug', $campaignId)->first();
         return view('frontend.pages.loyalty_campaign_landing', compact('campaign'));
     }
 

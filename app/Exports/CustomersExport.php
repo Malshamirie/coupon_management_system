@@ -11,7 +11,7 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping
 {
     public function collection()
     {
-        return Customer::with('container')->get();
+        return Customer::with('loyaltyContainer')->get();
     }
 
     public function headings(): array
@@ -32,7 +32,7 @@ class CustomersExport implements FromCollection, WithHeadings, WithMapping
             $customer->phone_number,
             $customer->email,
             $customer->address,
-            $customer->container->name ?? ''
+            $customer->loyaltyContainer->name ?? ''
         ];
     }
 } 

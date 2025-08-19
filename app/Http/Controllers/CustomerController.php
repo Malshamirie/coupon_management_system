@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Container;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CustomersImport;
+use App\Models\LoyaltyContainer;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $queryBuilder = Customer::with('container');
+        $queryBuilder = Customer::with('loyaltyContainer');
 
+        // البحث في اسم العميل أو رقم الهاتف أو البريد الإلكتروني
         if ($request->filled('query')) {
             $search = $request->input('query');
             $queryBuilder->where(function($q) use ($search) {
@@ -23,10 +25,15 @@ class CustomerController extends Controller
             });
         }
 
-        $customers = $queryBuilder->orderBy('id', 'desc')->paginate(10);
-        $containers = Container::all();
+        // فلترة حسب حاوية الولاء
+        if ($request->filled('loyalty_container_id')) {
+            $queryBuilder->where('loyalty_container_id', $request->loyalty_container_id);
+        }
 
-        return view('backend.pages.customers.index', compact('customers', 'containers'));
+        $customers = $queryBuilder->orderBy('id', 'desc')->paginate(10);
+        $loyaltyContainers = LoyaltyContainer::where('is_active', true)->get();
+
+        return view('backend.pages.customers.index', compact('customers', 'loyaltyContainers'));
     }
 
     public function store(Request $request)
@@ -36,7 +43,7 @@ class CustomerController extends Controller
             'phone' => 'required|string|max:255|unique:customers,phone',
             'email' => 'nullable|email|max:255|unique:customers,email',
             'address' => 'nullable|string',
-            'container_id' => 'required|exists:containers,id'
+            'loyalty_container_id' => 'required|exists:loyalty_containers,id'
         ]);
 
         Customer::create($request->all());
@@ -52,7 +59,7 @@ class CustomerController extends Controller
             'phone' => 'required|string|max:255|unique:customers,phone,' . $id,
             'email' => 'nullable|email|max:255|unique:customers,email,' . $id,
             'address' => 'nullable|string',
-            'container_id' => 'required|exists:containers,id'
+            'loyalty_container_id' => 'required|exists:loyalty_containers,id'
         ]);
 
         $customer = Customer::findOrFail($id);
@@ -74,7 +81,7 @@ class CustomerController extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv,txt',
-            'container_id' => 'required|exists:containers,id'
+            'loyalty_container_id' => 'required|exists:loyalty_containers,id'
         ]);
 
         try {

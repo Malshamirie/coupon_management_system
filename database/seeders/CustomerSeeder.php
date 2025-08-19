@@ -15,14 +15,14 @@ class CustomerSeeder extends Seeder
         'phone' => '0500000001',
         'email' => 'customer1@example.com',
         'address' => 'الرياض',
-        'container_id' => 1,
+        'loyalty_container_id' => 1,
       ],
       [
         'name' => 'عميل 2',
         'phone' => '0500000002',
         'email' => 'customer2@example.com',
         'address' => 'جدة',
-        'container_id' => 1,
+        'loyalty_container_id' => 1,
       ],
     ];
     foreach ($customers as $customer) {

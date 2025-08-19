@@ -56,7 +56,7 @@
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $city->name }}</td>
-                    <td>{{ $city->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $city->created_at }}</td>
                     <td>
                       @can('edit_city')
                         <a href="" class="btn btn-success btn-xs ml-1" data-bs-toggle="modal"

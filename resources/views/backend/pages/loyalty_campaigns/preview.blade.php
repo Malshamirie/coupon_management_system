@@ -23,8 +23,8 @@
               <p><strong>{{ __('back.manager_name') }}:</strong> {{ $loyaltyCampaign->manager_name }}</p>
             </div>
             <div class="col-md-6">
-              <p><strong>{{ __('back.start_date') }}:</strong> {{ $loyaltyCampaign->start_date->format('Y-m-d') }}</p>
-              <p><strong>{{ __('back.end_date') }}:</strong> {{ $loyaltyCampaign->end_date->format('Y-m-d') }}</p>
+              <p><strong>{{ __('back.start_date') }}:</strong> {{ $loyaltyCampaign->start_date }}</p>
+              <p><strong>{{ __('back.end_date') }}:</strong> {{ $loyaltyCampaign->end_date }}</p>
               <p><strong>{{ __('back.loyalty_card') }}:</strong> {{ $loyaltyCampaign->loyaltyCard->name ?? '--' }}</p>
             </div>
           </div>
@@ -58,7 +58,7 @@
                     <td>{{ $customer->name }}</td>
                     <td>{{ $customer->phone }}</td>
                     <td>{{ $customer->email ?? '--' }}</td>
-                    <td>{{ $customer->container->name ?? '--' }}</td>
+                    <td>{{ $customer->loyaltyContainer->name ?? '--' }}</td>
                   </tr>
                 @empty
                   <tr>

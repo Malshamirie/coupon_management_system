@@ -33,15 +33,15 @@
                 </tr>
                 <tr>
                   <th>{{ __('back.container') }}</th>
-                  <td>{{ $loyaltyCampaign->container->name ?? '--' }}</td>
+                  <td>{{ $loyaltyCampaign->loyaltyContainer->name ?? '--' }}</td>
                 </tr>
                 <tr>
                   <th>{{ __('back.start_date') }}</th>
-                  <td>{{ $loyaltyCampaign->start_date->format('Y-m-d') }}</td>
+                  <td>{{ $loyaltyCampaign->start_date }}</td>
                 </tr>
                 <tr>
                   <th>{{ __('back.end_date') }}</th>
-                  <td>{{ $loyaltyCampaign->end_date->format('Y-m-d') }}</td>
+                  <td>{{ $loyaltyCampaign->end_date }}</td>
                 </tr>
                 <tr>
                   <th>{{ __('back.manager_name') }}</th>
@@ -117,7 +117,7 @@
                   <td>
                     <a href="{{ route('admin.loyalty_campaigns.customers', $loyaltyCampaign->id) }}"
                       class="btn btn-info btn-sm">
-                      {{ $loyaltyCampaign->total_customers }}
+                      {{ $loyaltyCampaign->loyaltyContainer->customers_count??0 }}
                     </a>
                   </td>
                 </tr>
@@ -148,7 +148,7 @@
               </a>
             @endcan
 
-            <a href="{{ route('loyalty.campaign.landing', $loyaltyCampaign->id) }}" target="_blank" class="btn btn-info">
+            <a href="{{ route('loyalty.campaign.landing', $loyaltyCampaign->slug) }}" target="_blank" class="btn btn-info">
               <i class="fas fa-external-link-alt"></i> {{ __('back.view_landing_page') }}
             </a>
 

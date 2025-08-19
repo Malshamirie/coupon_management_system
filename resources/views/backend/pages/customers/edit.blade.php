@@ -33,11 +33,11 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">{{ __('back.container') }} <span class="text-danger">*</span></label>
-              <select name="container_id" class="form-select" required>
+              <select name="loyalty_container_id" class="form-select" required>
                 <option value="">{{ __('back.select_container') }}</option>
-                @foreach ($containers as $container)
-                  <option value="{{ $container->id }}"
-                    {{ $customer->container_id == $container->id ? 'selected' : '' }}>{{ $container->name }}</option>
+                @foreach ($loyaltyContainers as $loyaltyContainer)  
+                  <option value="{{ $loyaltyContainer->id }}"
+                    {{ $customer->loyalty_container_id == $loyaltyContainer->id ? 'selected' : '' }}>{{ $loyaltyContainer->name }}</option>
                 @endforeach
               </select>
             </div>

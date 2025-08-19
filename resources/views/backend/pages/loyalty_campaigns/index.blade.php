@@ -76,6 +76,23 @@
                 </select>
               </div>
               <div class="col-md-3">
+                <label for="loyalty_container_id">{{ __('back.filter_by_loyalty_container') }}</label>
+                <select name="loyalty_container_id" id="loyalty_container_id" class="form-control">
+                  <option value="">{{ __('back.select_loyalty_container') }}</option>
+                  @foreach ($loyaltyContainers as $loyaltyContainer)
+                    <option value="{{ $loyaltyContainer->id }}" {{ request('loyalty_container_id') == $loyaltyContainer->id ? 'selected' : '' }}>
+                      {{ $loyaltyContainer->name }}
+                    </option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="search_campaign">{{ __('back.search_campaign') }}</label>
+                <input type="text" name="search_campaign" id="search_campaign" class="form-control" 
+                       value="{{ request('search_campaign') }}" 
+                       placeholder="{{ __('back.search_campaign_placeholder') }}">
+              </div>
+              <div class="col-md-3">
                 <label>&nbsp;</label>
                 <div>
                   <button type="submit" class="btn btn-primary">{{ __('back.apply_filters') }}</button>
@@ -106,7 +123,7 @@
                   <th>{{ trans('back.card_type') }}</th>
                   <th>{{ trans('back.start_date') }}</th>
                   <th>{{ trans('back.end_date') }}</th>
-                  <th>{{ trans('back.total_customers') }}</th>
+                  <th>{{ trans('back.container') }}</th>
                   <th>{{ trans('back.created_at') }}</th>
                   <th>{{ trans('back.actions') }}</th>
                 </tr>
@@ -121,15 +138,17 @@
                     <td>{{ $key + $campaigns->firstItem() }}</td>
                     <td>{{ $campaign->campaign_name }}</td>
                     <td>{{ $campaign->loyaltyCard->name ?? '--' }}</td>
-                    <td>{{ $campaign->start_date->format('Y-m-d') }}</td>
-                    <td>{{ $campaign->end_date->format('Y-m-d') }}</td>
+                    <td>{{ $campaign->start_date }}</td>
+                    <td>{{ $campaign->end_date }}</td>
                     <td>
-                      <a href="{{ route('admin.loyalty_campaigns.customers', $campaign->id) }}"
-                        class="btn btn-info btn-xs">
-                        {{ $campaign->total_customers }}
+                      {{ $campaign->loyaltyContainer->name??'-' }}
+                      <br>
+
+                      <a href="{{ route('admin.customers.index', ['loyalty_container_id' => $campaign->loyalty_container_id]) }}">
+                       {{ __('back.customers') }}  ({{ $campaign->loyaltyContainer->customers_count }})
                       </a>
                     </td>
-                    <td>{{ $campaign->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $campaign->created_at }}</td>
                     <td>
                       @can('edit_loyalty_campaign')
                         <a href="{{ route('admin.loyalty_campaigns.edit', $campaign->id) }}"

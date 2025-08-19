@@ -2411,5 +2411,28 @@ return [
     'select_container' => 'Select Container',
     'import_file' => 'Import File',
 
+    // Loyalty Containers
+    'loyalty_containers' => 'Loyalty Containers',
+    'add_loyalty_container' => 'Add Loyalty Container',
+    'edit_loyalty_container' => 'Edit Loyalty Container',
+    'delete_loyalty_container' => 'Delete Loyalty Container',
+    'are_you_sure_delete_loyalty_container' => 'Are you sure you want to delete the loyalty container',
+    'loyalty_container_campaigns' => 'Loyalty Container Campaigns',
+    'back_to_containers' => 'Back to Containers',
+    'campaigns_in_container' => 'Campaigns in Container',
+    'no_campaigns_found' => 'No campaigns found',
+    'campaigns_count' => 'Campaigns Count',
+    'customers_count' => 'Customers Count',
+    'filter_by_loyalty_container' => 'Filter by Loyalty Container',
+    'filter_by_creation_date' => 'Filter by Creation Date',
+    'filter_by_start_date' => 'Filter by Campaign Start Date',
+    'select_loyalty_container' => 'Select Loyalty Container',
+
+    'search_campaign' => 'Search Campaign',
+    'search_campaign_placeholder' => 'Search in campaign name or manager name',
+
+    'loyalty_container' => 'Loyalty Container',
+    'filter_by_loyalty_container' => 'Filter by Loyalty Container',
+    'select_loyalty_container' => 'Select Loyalty Container',
 
 ];

@@ -11,8 +11,8 @@ class Customer extends Model
 
   protected $guarded = [];
 
-  public function container()
+  public function loyaltyContainer()
   {
-    return $this->belongsTo(Container::class);
+    return $this->belongsTo(LoyaltyContainer::class);
   }
 }

@@ -264,6 +264,7 @@ return [
     'preview_campaign' => 'استعراض الحملة',
     'export_campaigns' => 'تصدير الحملات',
     'filter_by_card_type' => 'فلترة حسب نوع البطاقة',
+    'filter_by_loyalty_container' => 'فلترة حسب حاوية الولاء',
     'filter_by_creation_date' => 'فلترة حسب تاريخ الإنشاء',
     'filter_by_start_date' => 'فلترة حسب تاريخ بداية الحملة',
     'latest' => 'الأحدث',
@@ -3007,7 +3008,35 @@ return [
 
     'loyalty_campaign_recipients' => 'مستقبلي الحملات',
 
+    // حاويات حملات الولاء
+    'loyalty_containers' => 'حاويات حملات الولاء',
+    'add_loyalty_container' => 'إضافة حاوية حملات ولاء',
+    'edit_loyalty_container' => 'تعديل حاوية حملات الولاء',
+    'delete_loyalty_container' => 'حذف حاوية حملات الولاء',
+    'are_you_sure_delete_loyalty_container' => 'هل أنت متأكد من حذف حاوية حملات الولاء',
+    'loyalty_container_campaigns' => 'حملات حاوية الولاء',
+    'back_to_containers' => 'العودة للحاويات',
+    'campaigns_in_container' => 'الحملات في الحاوية',
+    'no_campaigns_found' => 'لا توجد حملات',
+    'campaigns_count' => 'عدد الحملات',
+    'customers_count' => 'عدد العملاء',
 
-    
+    'loyalty_containers' => ' حاويات الولاء',
+    'show_loyalty_container' => 'عرض حاوية الولاء',
+    'edit_loyalty_container' => 'تعديل حاوية الولاء',
+    'delete_loyalty_container' => 'حذف حاوية الولاء',
+    'add_loyalty_container' => 'إضافة حاوية الولاء',
+    'search_loyalty_container' => 'البحث عن حاوية الولاء',
+
+    'select_loyalty_container' => 'اختر حاوية الولاء',
+
+    'search_campaign' => 'البحث في الحملة',
+    'search_campaign_placeholder' => 'ابحث في اسم الحملة أو اسم المدير',
+
+    'loyalty_container' => 'حاوية الولاء',
+    'filter_by_loyalty_container' => 'فلترة حسب حاوية الولاء',
+    'select_loyalty_container' => 'اختر حاوية الولاء',
+    'all' => '(الكل)',
+    'section_loyalty_campaigns' => 'قسم حملات الولاء',
 
 ];

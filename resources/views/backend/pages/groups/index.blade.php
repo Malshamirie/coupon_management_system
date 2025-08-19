@@ -56,7 +56,7 @@
                   <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $group->name }}</td>
-                    <td>{{ $group->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $group->created_at }}</td>
                     <td>
                       @can('edit_group')
                         <a href="" class="btn btn-success btn-xs ml-1" data-bs-toggle="modal"

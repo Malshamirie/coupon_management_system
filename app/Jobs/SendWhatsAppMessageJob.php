@@ -42,7 +42,8 @@ class SendWhatsAppMessageJob implements ShouldQueue
     $imageUrl = $this->loyaltyCampaign->whatsapp_image_url ?? null;
 
     // استخدام رابط عام بدلاً من الرابط المحلي
-    $landingPageUrl = $this->getLandingPageUrl();
+    $landingPageUrl = '';
+    // $landingPageUrl = $this->getLandingPageUrl();
 
     // Log the data being sent
     Log::info('WhatsApp Job Data:', [

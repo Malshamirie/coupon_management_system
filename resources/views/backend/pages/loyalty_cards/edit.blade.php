@@ -41,7 +41,7 @@
           <div class="row">
             <div class="col-md-12 mb-3">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="is_active" id="is_active{{ $card->id }}"
+                <input class="form-check-input" type="checkbox" value="{{ $card->is_active }}" name="is_active" id="is_active{{ $card->id }}"
                   {{ $card->is_active ? 'checked' : '' }}>
                 <label class="form-check-label" for="is_active{{ $card->id }}">
                   {{ __('back.activate_card') }}

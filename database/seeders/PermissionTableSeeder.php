@@ -112,6 +112,13 @@ class PermissionTableSeeder extends Seeder
             'export_customers',
 
 
+            // حاويات الولاء
+            'loyalty_containers',
+            'add_loyalty_container',
+            'edit_loyalty_container',
+            'delete_loyalty_container',
+            'show_loyalty_container',
+            'search_loyalty_container',
 
         ];
 
