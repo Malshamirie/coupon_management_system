@@ -35,6 +35,11 @@
   <!-- custom css -->
   <link href="{{ asset('backend/custom.css') }}" id="app-stylesheet" rel="stylesheet" type="text/css" />
 
+  <style>
+    body, h1, h2, h3, h4, h5, h6, p,a,span, .navigation-menu>li>a{
+    font-family: 'Cairo', sans-serif;
+}
+
+  </style>
   @yield('css')
-  @livewireStyles
 </head>
