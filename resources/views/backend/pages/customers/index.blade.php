@@ -7,6 +7,52 @@
 {{ __('back.customers') }}
 @endsection
 @section('content')
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">{{ __('back.dashboard') }}</a></li>
+      <li class="breadcrumb-item active">{{ __('back.customers') }}</li>
+    </ol>
+  </nav>
+    <!-- إحصائيات العملاء والموارد -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-right-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    إجمالي العملاء
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['total_customers'] }}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-users fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card border-right-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                    العملاء في برنامج الولاء
+                  </div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['customers_in_loyalty'] }}</div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-heart fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        
+      </div>
     <div class="row mb-2" id="table-bordered">
         @can('add_customer')
             <div class="col-md-6">
@@ -18,10 +64,10 @@
                     <i class="fas fa-upload"></i>
                     {{ __('back.import_customers') }}
                 </button>
-                <a href="{{ route('admin.customers.export') }}" class="btn btn-success">
+                {{-- <a href="{{ route('admin.customers.export') }}" class="btn btn-success">
                     <i class="fas fa-download"></i>
                     {{ __('back.export_customers') }}
-                </a>
+                </a> --}}
                 @include('backend.pages.customers.add')
                 @include('backend.pages.customers.import')
             </div>

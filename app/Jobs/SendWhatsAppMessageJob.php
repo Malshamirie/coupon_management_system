@@ -42,7 +42,7 @@ class SendWhatsAppMessageJob implements ShouldQueue
     $imageUrl = $this->loyaltyCampaign->whatsapp_image_url ?? null;
 
     // استخدام رابط عام بدلاً من الرابط المحلي
-    $landingPageUrl = '';
+    $landingPageUrl = $this->loyaltyCampaign->campaign_name;
     // $landingPageUrl = $this->getLandingPageUrl();
 
     // Log the data being sent
@@ -70,7 +70,7 @@ class SendWhatsAppMessageJob implements ShouldQueue
     try {
       $requestData = [
         'templateID' => $templateID,
-        'userPhoneNumber' => $phone,
+        'userPhoneNumber' => '966' . $phone,
         'variables' => [
           $imageUrl,
           $landingPageUrl

@@ -16,23 +16,145 @@
     </ol>
   </nav>
 
-  <!-- Filters -->
-  <div class="row mb-3">
-    <div class="col-12">
-      <div class="card">
-        <div class="card-header">
-          <h5>{{ __('back.filters') }}</h5>
-        </div>
+  <!-- إحصائيات الطلبات الزمنية -->
+  <div class="row mb-1">
+    <div class="col-xl-3 col-md-4 mb-2">
+      <div class="card border-right-primary shadow h-100 py-2">
         <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                إجمالي الطلبات
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['requests_total'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-4 mb-2">
+      <div class="card border-right-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                طلبات هذا الشهر
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['requests_this_month'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-4 mb-2">
+      <div class="card border-right-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                طلبات هذا الأسبوع
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['requests_this_week'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-week fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-4 mb-2">
+      <div class="card border-right-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                طلبات اليوم
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['requests_today'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- إحصائيات الطلبات -->
+    <div class="row mb-4">
+     
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-right-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                  الطلبات المعلقة
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['pending_requests'] }}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-hourglass-half fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-right-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                  الطلبات المقبولة
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['approved_requests'] }}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-right-danger shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                  الطلبات المرفوضة
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['rejected_requests'] }}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- Filters -->
+  <div class="row mb-2">
+    <div class="col-12">
+        
+       
           <form id="filters-form" method="GET">
             <div class="row">
-              <div class="col-md-3">
-                <div class="mb-3">
-                  <label for="search" class="form-label">{{ __('back.search') }}</label>
-                  <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}"
-                    placeholder="{{ __('back.search_loyalty_card_request') }}">
-                </div>
-              </div>
+              
               <div class="col-md-3">
                 <div class="mb-3">
                   <label for="campaign_id" class="form-label">{{ __('back.filter_by_campaign') }}</label>
@@ -63,7 +185,7 @@
               <div class="col-md-3">
                 <div class="mb-3">
                   <label for="status" class="form-label">{{ __('back.filter_by_status') }}</label>
-                  <select class="form-select" id="status" name="status">
+                  <select class="form-select" id="" name="status">
                     <option value="">{{ __('back.all_statuses') }}</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
                       {{ __('back.loyalty_card_status_pending') }}
@@ -80,23 +202,28 @@
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <button type="submit" class="btn btn-primary">
-                  <i class="fas fa-search"></i> {{ __('back.search') }}
-                </button>
-                <a href="{{ route('admin.loyalty_card_requests.index') }}" class="btn btn-secondary">
-                  <i class="fas fa-times"></i> {{ __('back.clear') }}
-                </a>
-                <a href="{{ route('admin.loyalty_card_requests.export') }}" class="btn btn-success">
-                  <i class="fas fa-download"></i> {{ __('back.export') }}
-                </a>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label for="search" class="form-label">{{ __('back.search') }}</label>
+                  
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}"
+                    placeholder="{{ __('back.search_loyalty_card_request') }}">
+                      <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                      </button>
+                      <a href="{{ route('admin.loyalty_card_requests.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i>
+                      </a>
+                      {{-- <a href="{{ route('admin.loyalty_card_requests.export') }}" class="btn btn-success">
+                        <i class="fas fa-download"></i> {{ __('back.export') }}
+                      </a> --}}
+                    </div>
+                </div>
               </div>
             </div>
           </form>
-        </div>
-      </div>
+       
     </div>
   </div>
 
@@ -104,9 +231,6 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header">
-          <h5>{{ __('back.loyalty_card_requests') }}</h5>
-        </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -129,42 +253,25 @@
                     <td>{{ $request->customer_name }}</td>
                     <td>{{ $request->customer_phone }}</td>
                     <td>{{ $request->loyaltyCampaign->campaign_name ?? '--' }}</td>
-                    <td>{{ $request->branch->name ?? '--' }}</td>
+                    <td>{{ $request->branch->branch_name ?? '--' }}</td>
                     <td>
-                      <span class="badge bg-{{ $request->status_badge }}">
+                      <span class="badge bg-{{ $request->status_badge }} status-badge" 
+                            style="cursor: pointer;" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#change-status-modal"
+                            data-request-id="{{ $request->id }}"
+                            data-current-status="{{ $request->status }}"
+                            data-current-status-text="{{ $request->status_text }}">
                         {{ $request->status_text }}
                       </span>
                     </td>
                     <td>{{ $request->requested_at->format('Y-m-d H:i') }}</td>
                     <td>
                       <div class="btn-group" role="group">
-                        <a href="{{ route('admin.loyalty_card_requests.show', $request->id) }}"
-                          class="btn btn-sm btn-info" title="{{ __('back.show') }}">
-                          <i class="fas fa-eye"></i>
-                        </a>
-                        <a href="{{ route('admin.loyalty_card_requests.edit', $request->id) }}"
-                          class="btn btn-sm btn-warning" title="{{ __('back.edit') }}">
-                          <i class="fas fa-edit"></i>
-                        </a>
-
-                        @if ($request->status == 'pending')
-                          <button type="button" class="btn btn-sm btn-success approve-btn" data-id="{{ $request->id }}"
-                            title="{{ __('back.approve_request') }}">
-                            <i class="fas fa-check"></i>
-                          </button>
-                          <button type="button" class="btn btn-sm btn-danger reject-btn" data-id="{{ $request->id }}"
-                            title="{{ __('back.reject_request') }}">
-                            <i class="fas fa-times"></i>
-                          </button>
-                        @endif
-
-                        @if ($request->status == 'approved')
-                          <button type="button" class="btn btn-sm btn-info deliver-btn" data-id="{{ $request->id }}"
-                            title="{{ __('back.deliver_card') }}">
-                            <i class="fas fa-gift"></i>
-                          </button>
-                        @endif
-
+                        
+                        
+                       
+                        
                         <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="{{ $request->id }}"
                           title="{{ __('back.delete') }}">
                           <i class="fas fa-trash"></i>
@@ -214,7 +321,79 @@
       </div>
     </div>
   </div>
+
+  <!-- Change Status Modal -->
+  <div class="modal fade" id="change-status-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">تغيير حالة الطلب</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="change-status-form">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">الحالة الحالية</label>
+              <div class="form-control-plaintext" id="current-status-display"></div>
+            </div>
+            <div class="mb-3">
+              <label for="new_status" class="form-label">الحالة الجديدة</label>
+              <select class="form-control" id="new_status" name="status" required>
+                <option value="">اختر الحالة الجديدة</option>
+                <option value="pending">معلق</option>
+                <option value="approved">مقبول</option>
+                <option value="rejected">مرفوض</option>
+                <option value="processing">قيد المعالجة</option>
+                <option value="completed">مكتمل</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="status_notes" class="form-label">ملاحظات (اختياري)</label>
+              <textarea class="form-control" id="status_notes" name="notes" rows="3"
+                placeholder="أضف ملاحظات حول تغيير الحالة..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            <button type="submit" class="btn btn-primary">تحديث الحالة</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @endsection
+
+@push('styles')
+<style>
+  .status-badge {
+    transition: all 0.3s ease;
+  }
+  
+  .status-badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  
+  .status-badge:active {
+    transform: scale(0.95);
+  }
+  
+  .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+  
+  .modal-header .btn-close {
+    filter: invert(1);
+  }
+  
+  .form-control-plaintext {
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+  }
+</style>
+@endpush
 
 @section('js')
   <script>
@@ -224,7 +403,7 @@
         const id = $(this).data('id');
         if (confirm('{{ __('back.are_you_sure_approve') }}')) {
           $.ajax({
-            url: `/{{ app()->getLocale() }}/loyalty-card-requests/${id}/approve`,
+            url: `/{{ app()->getLocale() }}/admin/loyalty-card-requests/${id}/approve`,
             method: 'POST',
             data: {
               _token: '{{ csrf_token() }}'
@@ -253,7 +432,7 @@
         const notes = $('#reject_notes').val();
 
         $.ajax({
-          url: `/{{ app()->getLocale() }}/loyalty-card-requests/${id}/reject`,
+          url: `/{{ app()->getLocale() }}/admin/loyalty-card-requests/${id}/reject`,
           method: 'POST',
           data: {
             notes: notes,
@@ -275,7 +454,7 @@
         const id = $(this).data('id');
         if (confirm('{{ __('back.are_you_sure_deliver') }}')) {
           $.ajax({
-            url: `/{{ app()->getLocale() }}/loyalty-card-requests/${id}/deliver`,
+            url: `/{{ app()->getLocale() }}/admin/loyalty-card-requests/${id}/deliver`,
             method: 'POST',
             data: {
               _token: '{{ csrf_token() }}'
@@ -296,7 +475,7 @@
         const id = $(this).data('id');
         if (confirm('{{ __('back.are_you_sure_delete') }}')) {
           $.ajax({
-            url: `/{{ app()->getLocale() }}/loyalty-card-requests/${id}`,
+            url: `/{{ app()->getLocale() }}/admin/loyalty-card-requests/${id}`,
             method: 'DELETE',
             data: {
               _token: '{{ csrf_token() }}'
@@ -311,6 +490,77 @@
           });
         }
       });
+
+      // Change Status Modal
+      $('.status-badge').click(function() {
+        const requestId = $(this).data('request-id');
+        const currentStatus = $(this).data('current-status');
+        const currentStatusText = $(this).data('current-status-text');
+        
+        // Set current status display
+        $('#current-status-display').html(`<span class="badge bg-${getStatusBadgeColor(currentStatus)}">${currentStatusText}</span>`);
+        
+        // Set form data
+        $('#change-status-form').data('request-id', requestId);
+        $('#change-status-form').data('current-status', currentStatus);
+        
+        // Reset form
+        $('#new_status').val('');
+        $('#status_notes').val('');
+      });
+
+      // Submit status change form
+      $('#change-status-form').submit(function(e) {
+        e.preventDefault();
+        const requestId = $(this).data('request-id');
+        const currentStatus = $(this).data('current-status');
+        const newStatus = $('#new_status').val();
+        const notes = $('#status_notes').val();
+
+        if (!newStatus) {
+          toastr.error('يرجى اختيار الحالة الجديدة');
+          return;
+        }
+
+        if (newStatus === currentStatus) {
+          toastr.warning('الحالة الجديدة مطابقة للحالة الحالية');
+          return;
+        }
+
+        $.ajax({
+          url: `/{{ app()->getLocale() }}/admin/loyalty-card-requests/${requestId}/change-status`,
+          method: 'POST',
+          data: {
+            status: newStatus,
+            notes: notes,
+            _token: '{{ csrf_token() }}'
+          },
+          success: function(response) {
+            toastr.success(response.message);
+            $('#change-status-modal').modal('hide');
+            setTimeout(() => location.reload(), 1000);
+          },
+          error: function(xhr) {
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              toastr.error(xhr.responseJSON.message);
+            } else {
+              toastr.error('{{ __('back.error_occurred') }}');
+            }
+          }
+        });
+      });
+
+      // Helper function to get badge color
+      function getStatusBadgeColor(status) {
+        const colors = {
+          'pending': 'warning',
+          'approved': 'success',
+          'rejected': 'danger',
+          'processing': 'info',
+          'completed': 'primary'
+        };
+        return colors[status] || 'secondary';
+      }
     });
   </script>
 @endsection

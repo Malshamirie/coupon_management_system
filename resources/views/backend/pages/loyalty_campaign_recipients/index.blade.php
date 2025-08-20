@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title', 'مستقبلي حملات الولاء')
+@section('page_title', 'مستقبلي حملات الولاء')
 
 @section('content')
   <div class="container-fluid">
@@ -12,36 +12,40 @@
           </div>
           <div class="card-body">
             <!-- فلاتر البحث -->
+            <form action="{{ route('admin.loyalty_campaign_recipients.index') }}" method="GET" role="search">
             <div class="row mb-3">
               <div class="col-md-3">
-                <select class="form-control" id="campaign_filter">
+                <select class="form-control" name="campaign_id" id="campaign_filter">
                   <option value="">جميع الحملات</option>
                   @foreach ($campaigns as $campaign)
-                    <option value="{{ $campaign->id }}">{{ $campaign->campaign_name }}</option>
+                    <option value="{{ $campaign->id }}" {{ request('campaign_id') == $campaign->id ? 'selected' : '' }}>{{ $campaign->campaign_name }}</option>
                   @endforeach
                 </select>
               </div>
               <div class="col-md-2">
-                <select class="form-control" id="status_filter">
+                <select class="form-control" name="status" id="status_filter">
                   <option value="">جميع الحالات</option>
-                  <option value="sent">تم الإرسال</option>
-                  <option value="delivered">تم التسليم</option>
-                  <option value="failed">فشل الإرسال</option>
+                  <option value="sent" {{ request('status') == 'sent' ? 'selected' : '' }}>تم الإرسال</option>
+                  <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>تم التسليم</option>
+                  <option value="failed" {{ request('status') == 'failed' ? 'selected' : '' }}>فشل الإرسال</option>
                 </select>
               </div>
               <div class="col-md-3">
-                <input type="text" class="form-control" id="phone_filter" placeholder="رقم الهاتف">
+                <input type="text" class="form-control" name="phone" id="phone_filter" placeholder="رقم الهاتف" value="{{ request('phone') }}">
               </div>
               <div class="col-md-2">
-                <button class="btn btn-primary" onclick="applyFilters()">تطبيق الفلاتر</button>
+                <button class="btn btn-primary">
+                  <i class="fas fa-search"></i>
+                </button>
               </div>
-              <div class="col-md-2">
+              {{-- <div class="col-md-2">
                 <button class="btn btn-warning" onclick="retryFailed()">إعادة المحاولة للفاشل</button>
-              </div>
+              </div> --}}
             </div>
+            </form>
 
             <!-- إحصائيات سريعة -->
-            <div class="row mb-3">
+            {{-- <div class="row mb-3">
               <div class="col-md-3">
                 <div class="card bg-primary text-white">
                   <div class="card-body">
@@ -74,14 +78,15 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> --}}
 
             <!-- جدول البيانات -->
             <div class="table-responsive">
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th><input type="checkbox" id="select_all"></th>
+                    <th>#</th>
+                    {{-- <th><input type="checkbox" id="select_all"></th> --}}
                     <th>الحملة</th>
                     <th>العميل</th>
                     <th>رقم الهاتف</th>
@@ -92,13 +97,14 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($recipients as $recipient)
+                  @foreach ($recipients as $key => $recipient)
                     <tr>
-                      <td>
+                      <td>{{ $key + $recipients->firstItem() }}</td>
+                      {{-- <td>
                         @if ($recipient->status === 'failed')
                           <input type="checkbox" class="recipient-checkbox" value="{{ $recipient->id }}">
                         @endif
-                      </td>
+                      </td> --}}
                       <td>{{ $recipient->loyaltyCampaign->campaign_name }}</td>
                       <td>{{ $recipient->customer->name ?? 'غير محدد' }}</td>
                       <td>{{ $recipient->phone_number }}</td>

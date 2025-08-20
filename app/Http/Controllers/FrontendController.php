@@ -187,6 +187,12 @@ class FrontendController extends Controller
         return view('frontend.pages.loyalty_campaign_landing', compact('campaign'));
     }
 
+    public function loyaltyCampaignSuccess($id)
+    {
+        $campaign = \App\Models\LoyaltyCampaign::findOrFail($id);
+        return view('frontend.pages.loyalty_campaign_success', compact('campaign'));
+    }
+
     public function verifyOtpء(Request $request, $slug)
     {
         $request->validate([

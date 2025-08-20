@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">{{ __('back.phone_number') }} <span class="text-danger">*</span></label>
-              <input type="text" value="{{ $customer->phone_number }}" class="form-control"
+              <input type="text" value="{{ $customer->phone }}" class="form-control"
                 placeholder="{{ __('back.phone_number') }}" name="phone" required>
             </div>
           </div>

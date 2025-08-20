@@ -31,6 +31,8 @@ class LoyaltyCardRequest extends Model
     const STATUS_APPROVED = 'approved';
     const STATUS_REJECTED = 'rejected';
     const STATUS_DELIVERED = 'delivered';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_COMPLETED = 'completed';
 
     // Relationships
     public function loyaltyCampaign()
@@ -95,7 +97,9 @@ class LoyaltyCardRequest extends Model
             self::STATUS_PENDING => 'warning',
             self::STATUS_APPROVED => 'success',
             self::STATUS_REJECTED => 'danger',
-            self::STATUS_DELIVERED => 'info'
+            self::STATUS_DELIVERED => 'info',
+            self::STATUS_PROCESSING => 'info',
+            self::STATUS_COMPLETED => 'primary'
         ];
 
         return $badges[$this->status] ?? 'secondary';

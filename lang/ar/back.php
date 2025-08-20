@@ -325,6 +325,8 @@ return [
     'loyalty_card_status_approved' => 'تمت الموافقة',
     'loyalty_card_status_rejected' => 'مرفوض',
     'loyalty_card_status_delivered' => 'تم التسليم',
+    'loyalty_card_status_processing' => 'قيد المعالجة',
+    'loyalty_card_status_completed' => 'مكتمل',
     'loyalty_card_request_submitted' => 'تم إرسال طلب البطاقة بنجاح',
     'loyalty_card_request_updated' => 'تم تحديث طلب البطاقة بنجاح',
     'loyalty_card_request_deleted' => 'تم حذف طلب البطاقة بنجاح',
@@ -3038,5 +3040,6 @@ return [
     'select_loyalty_container' => 'اختر حاوية الولاء',
     'all' => '(الكل)',
     'section_loyalty_campaigns' => 'قسم حملات الولاء',
+    'landing_page' => 'صفحة الهبوط',
 
 ];

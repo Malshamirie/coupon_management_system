@@ -74,6 +74,14 @@
       box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
 
+    .form-control.is-valid {
+      border-color: #28a745;
+    }
+
+    .form-control.is-invalid {
+      border-color: #dc3545;
+    }
+
     .btn-primary {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border: none;
@@ -86,6 +94,12 @@
     .btn-primary:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #6c757d;
+      transform: none;
+      box-shadow: none;
     }
 
     .campaign-footer {
@@ -107,6 +121,23 @@
     .spinner-border-sm {
       width: 1rem;
       height: 1rem;
+    }
+
+    .phone-validation {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .phone-validation.valid {
+      color: #28a745;
+    }
+
+    .phone-validation.invalid {
+      color: #dc3545;
+    }
+
+    .phone-validation.checking {
+      color: #ffc107;
     }
   </style>
 </head>
@@ -147,10 +178,23 @@
             <label for="name" class="form-label">اسم العميل <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="name" name="customer_name" required>
           </div>
+          
 
           <div class="mb-3">
             <label for="phone" class="form-label">رقم الجوال <span class="text-danger">*</span></label>
-            <input type="tel" class="form-control" id="phone" name="customer_phone" required>
+            <div class="input-group mb-3" dir="ltr">
+              <span class="input-group-text" id="basic-addon1">+966</span>
+              <input type="tel" 
+                     id="phone" 
+                     name="customer_phone" 
+                     class="form-control" 
+                     placeholder="50 000 0000" 
+                     aria-label="phone" 
+                     aria-describedby="basic-addon1" 
+                     maxlength="9"
+                     required>
+            </div>
+            <div id="phone-validation" class="phone-validation"></div>
           </div>
 
 
@@ -176,9 +220,7 @@
             <textarea class="form-control" id="customer_address" name="customer_address" rows="3"></textarea>
           </div>
 
-
-
-          <button type="submit" class="btn btn-primary w-100" id="submit-btn">
+          <button type="submit" class="btn btn-primary w-100" id="submit-btn" disabled>
             <span class="btn-text">إرسال</span>
             <span class="loading">
               <span class="spinner-border spinner-border-sm me-2" role="status"></span>
@@ -208,6 +250,112 @@
 
   <script>
     $(document).ready(function() {
+      var phoneValidationTimer;
+      var isPhoneValid = false;
+
+      // التحقق من رقم الهاتف
+      function validatePhone(phoneNumber) {
+        // التحقق من أن الرقم يحتوي على 9 أرقام فقط
+        if (phoneNumber.length !== 9) {
+          return false;
+        }
+        
+        // التحقق من أن الرقم يحتوي على أرقام فقط
+        if (!/^\d{9}$/.test(phoneNumber)) {
+          return false;
+        }
+        
+        return true;
+      }
+
+      // التحقق من وجود العميل في حاوية الولاء
+      function checkCustomerInLoyaltyContainer(phoneNumber) {
+        $.ajax({
+          url: '{{ route('api.check.customer.loyalty') }}',
+          method: 'POST',
+          data: {
+            phone: phoneNumber,
+            loyalty_container_id: '{{ $campaign->loyalty_container_id }}',
+            _token: '{{ csrf_token() }}'
+          },
+          success: function(response) {
+            if (response.exists) {
+              $('#phone').removeClass('is-invalid').addClass('is-valid');
+              $('#phone-validation').removeClass('invalid checking').addClass('valid')
+                .html('<i class="fas fa-check-circle"></i>  تم التحقق بنجاح   ');
+              isPhoneValid = true;
+              checkFormValidity();
+            } else {
+              $('#phone').removeClass('is-valid').addClass('is-invalid');
+              $('#phone-validation').removeClass('valid checking').addClass('invalid')
+                .html('<i class="fas fa-times-circle"></i> رقم العميل غير مسجل في حاوية الولاء');
+              isPhoneValid = false;
+              checkFormValidity();
+            }
+          },
+          error: function() {
+            $('#phone').removeClass('is-valid is-invalid');
+            $('#phone-validation').removeClass('valid invalid').addClass('checking')
+              .html('<i class="fas fa-exclamation-triangle"></i> خطأ في التحقق من رقم العميل');
+            isPhoneValid = false;
+            checkFormValidity();
+          }
+        });
+      }
+
+      // التحقق من صحة النموذج
+      function checkFormValidity() {
+        var name = $('#name').val().trim();
+        var phone = $('#phone').val().trim();
+        var city = $('#city').val();
+        var branch = $('#branch').val();
+        
+        // التحقق من أن جميع الحقول مملوءة والهاتف صحيح
+        if (name && isPhoneValid && city && branch) {
+          $('#submit-btn').prop('disabled', false);
+        } else {
+          $('#submit-btn').prop('disabled', true);
+        }
+      }
+
+      // مراقبة حقل الهاتف
+      $('#phone').on('input', function() {
+        var phoneNumber = $(this).val().replace(/\D/g, ''); // إزالة جميع الأحرف غير الرقمية
+        
+        // تحديث قيمة الحقل بالأرقام فقط
+        $(this).val(phoneNumber);
+        
+        // إزالة الرسائل السابقة
+        $('#phone-validation').removeClass('valid invalid checking').html('');
+        $('#phone').removeClass('is-valid is-invalid');
+        isPhoneValid = false;
+        checkFormValidity();
+        
+        // إلغاء المؤقت السابق
+        clearTimeout(phoneValidationTimer);
+        
+        // التحقق من صحة الرقم
+        if (validatePhone(phoneNumber)) {
+          // إظهار رسالة التحقق
+          $('#phone-validation').addClass('checking')
+            .html('<i class="fas fa-spinner fa-spin"></i> جاري التحقق من رقم العميل...');
+          
+          // تأخير التحقق لتجنب الطلبات المتكررة
+          phoneValidationTimer = setTimeout(function() {
+            checkCustomerInLoyaltyContainer(phoneNumber);
+          }, 500);
+        } else if (phoneNumber.length > 0) {
+          $('#phone').addClass('is-invalid');
+          $('#phone-validation').addClass('invalid')
+            .html('<i class="fas fa-times-circle"></i> يجب إدخال 9 أرقام فقط');
+        }
+      });
+
+      // مراقبة الحقول الأخرى
+      $('#name, #city, #branch').on('input change', function() {
+        checkFormValidity();
+      });
+
       // Load branches when city is selected
       $('#city').change(function() {
         var cityId = $(this).val();
@@ -230,25 +378,39 @@
 
               if (response.length > 0) {
                 response.forEach(function(branch) {
-                  branchSelect.append('<option value="' + branch.id + '">' + branch.name + '</option>');
+                  branchSelect.append('<option value="' + branch.id + '">' + branch.branch_name + '</option>');
                 });
               } else {
                 branchSelect.html('<option value="" disabled>-- لا توجد فروع في هذه المدينة --</option>');
               }
+              checkFormValidity();
             },
             error: function() {
               branchSelect.html('<option value="" disabled>-- خطأ في تحميل الفروع --</option>');
+              checkFormValidity();
             }
           });
         } else {
           // Disable branch select
           branchSelect.prop('disabled', true);
           branchSelect.html('<option value="" disabled selected>-- اختر المدينة أولاً --</option>');
+          checkFormValidity();
         }
       });
 
       $('#campaign-form').submit(function(e) {
         e.preventDefault();
+
+        // التحقق من صحة الهاتف قبل الإرسال
+        if (!isPhoneValid) {
+          $('#message-container').html(
+            '<div class="alert alert-danger">' +
+            '<i class="fas fa-exclamation-circle me-2"></i>' +
+            'يرجى التأكد من صحة رقم الهاتف' +
+            '</div>'
+          );
+          return;
+        }
 
         // Show loading state
         $('#submit-btn').prop('disabled', true);
@@ -275,23 +437,8 @@
             $('.btn-text').show();
             $('.loading').hide();
 
-            // Show success message
-            $('#message-container').html(
-              '<div class="alert alert-success">' +
-              '<i class="fas fa-check-circle me-2"></i>' +
-              response.message +
-              '</div>'
-            );
-
-            // Reset form
-            $('#campaign-form')[0].reset();
-
-            // Redirect if specified
-            @if ($campaign->redirect_url)
-              setTimeout(function() {
-                window.location.href = '{{ $campaign->redirect_url }}';
-              }, 2000);
-            @endif
+            // Redirect to success page
+            window.location.href = '{{ route('loyalty.campaign.success', $campaign->id) }}';
           },
           error: function(xhr) {
             // Hide loading state

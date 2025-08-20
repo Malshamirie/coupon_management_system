@@ -48,6 +48,7 @@ Route::group(
 
         // Loyalty Campaign Landing Page
         Route::get('/loyalty-campaign/{id}', [FrontendController::class, 'loyaltyCampaignLanding'])->name('loyalty.campaign.landing');
+        Route::get('/loyalty-campaign/{id}/success', [FrontendController::class, 'loyaltyCampaignSuccess'])->name('loyalty.campaign.success');
 
         // Route::get('/about-us', [FrontendController::class, 'about_us'])->name('about_us');
         // Route::get('/contact-us', [FrontendController::class, 'contact_us'])->name('contact_us');

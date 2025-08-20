@@ -74,7 +74,16 @@ Route::group(
             Route::resource('branches', BranchController::class);
             Route::resource('customers', CustomerController::class);
             Route::post('customers/import', [CustomerController::class, 'import'])->name('customers.import');
+            Route::post('customers/debug-import', [CustomerController::class, 'debugImport'])->name('customers.debug-import');
             Route::get('customers/export', [CustomerController::class, 'export'])->name('customers.export');
+
+            // Loyalty Card Requests
+            Route::resource('loyalty-card-requests', LoyaltyCardRequestController::class)->names('loyalty_card_requests');
+            Route::post('loyalty-card-requests/{loyaltyCardRequest}/approve', [LoyaltyCardRequestController::class, 'approve'])->name('loyalty_card_requests.approve');
+            Route::post('loyalty-card-requests/{loyaltyCardRequest}/reject', [LoyaltyCardRequestController::class, 'reject'])->name('loyalty_card_requests.reject');
+            Route::post('loyalty-card-requests/{loyaltyCardRequest}/deliver', [LoyaltyCardRequestController::class, 'deliver'])->name('loyalty_card_requests.deliver');
+            Route::post('loyalty-card-requests/{loyaltyCardRequest}/change-status', [LoyaltyCardRequestController::class, 'changeStatus'])->name('loyalty_card_requests.change-status');
+            Route::get('loyalty-card-requests/export', [LoyaltyCardRequestController::class, 'export'])->name('loyalty_card_requests.export');
         });
     }
 );
@@ -88,14 +97,10 @@ Route::get('/loyalty-campaign-recipients', [LoyaltyCampaignRecipientController::
 Route::post('/loyalty-campaign-recipients/retry', [LoyaltyCampaignRecipientController::class, 'retryFailed'])->name('admin.loyalty_campaign_recipients.retry');
 Route::get('/loyalty-campaign-recipients/statistics', [LoyaltyCampaignRecipientController::class, 'statistics'])->name('admin.loyalty_campaign_recipients.statistics');
 
-// Loyalty Card Requests
-Route::resource('loyalty-card-requests', LoyaltyCardRequestController::class)->names('admin.loyalty_card_requests');
-Route::post('/loyalty-card-requests/{loyaltyCardRequest}/approve', [LoyaltyCardRequestController::class, 'approve'])->name('admin.loyalty_card_requests.approve');
-Route::post('/loyalty-card-requests/{loyaltyCardRequest}/reject', [LoyaltyCardRequestController::class, 'reject'])->name('admin.loyalty_card_requests.reject');
-Route::post('/loyalty-card-requests/{loyaltyCardRequest}/deliver', [LoyaltyCardRequestController::class, 'deliver'])->name('admin.loyalty_card_requests.deliver');
-Route::get('/loyalty-card-requests/export', [LoyaltyCardRequestController::class, 'export'])->name('admin.loyalty_card_requests.export');
+
 
 // API Routes for frontend
 Route::get('/api/cities', [LoyaltyCardRequestController::class, 'getCities'])->name('api.cities');
 Route::get('/api/branches-by-city', [LoyaltyCardRequestController::class, 'getBranchesByCity'])->name('api.branches.by.city');
 Route::post('/api/loyalty-card-requests', [LoyaltyCardRequestController::class, 'store'])->name('api.loyalty_card_requests.store');
+Route::post('/api/check-customer-loyalty', [LoyaltyCardRequestController::class, 'checkCustomerInLoyaltyContainer'])->name('api.check.customer.loyalty');

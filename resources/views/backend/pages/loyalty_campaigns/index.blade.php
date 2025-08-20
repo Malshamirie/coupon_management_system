@@ -9,6 +9,69 @@
 @endsection
 
 @section('content')
+  <!-- إحصائيات حملات الولاء -->
+  <div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-right-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                إجمالي الحملات
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['total_campaigns'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-right-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                الحملات النشطة
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['active_campaigns'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-play-circle fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-right-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                الحملات القادمة
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $statistics['upcoming_campaigns'] }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clock fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  
+
   <div class="row mb-2" id="table-bordered">
     @can('add_loyalty_campaign')
       <div class="col-md-9">
@@ -19,7 +82,7 @@
       </div>
     @endcan
 
-    @can('loyalty_campaigns')
+    {{-- @can('loyalty_campaigns')
       <div class="col-md-3 mb-1">
         <form action="{{ route('admin.loyalty_campaigns.index') }}" method="GET" role="search">
           <div class="input-group">
@@ -34,7 +97,7 @@
           </div>
         </form>
       </div>
-    @endcan
+    @endcan --}}
   </div>
 
   <!-- Filters -->
@@ -95,9 +158,9 @@
               <div class="col-md-3">
                 <label>&nbsp;</label>
                 <div>
-                  <button type="submit" class="btn btn-primary">{{ __('back.apply_filters') }}</button>
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                   <a href="{{ route('admin.loyalty_campaigns.index') }}"
-                    class="btn btn-secondary">{{ __('back.clear_filters') }}</a>
+                    class="btn btn-secondary"><i class="fas fa-sync-alt"></i></a>
                 </div>
               </div>
             </div>
@@ -150,50 +213,61 @@
                     </td>
                     <td>{{ $campaign->created_at }}</td>
                     <td>
-                      @can('edit_loyalty_campaign')
-                        <a href="{{ route('admin.loyalty_campaigns.edit', $campaign->id) }}"
-                          class="btn btn-success btn-xs ml-1">
-                          <i class="fas fa-edit"></i>
-                        </a>
-                      @endcan
+                      <div class="dropdown">
+                        <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="actionsDropdown{{ $campaign->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="fas fa-cogs"></i> {{ __('back.actions') }}
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="actionsDropdown{{ $campaign->id }}">
+                          @can('edit_loyalty_campaign')
+                            <li>
+                              <a class="dropdown-item" href="{{ route('admin.loyalty_campaigns.edit', $campaign->id) }}">
+                                <i class="fas fa-edit text-success"></i> {{ __('back.edit') }}
+                              </a>
+                            </li>
+                          @endcan
 
-                      @can('delete_loyalty_campaign')
-                        <a href="" class="btn btn-danger btn-xs ml-1" data-bs-toggle="modal"
-                          data-bs-target="#delete_campaign{{ $campaign->id }}">
-                          <i class="fas fa-trash-alt"></i>
-                        </a>
-                      @endcan
+                          @can('delete_loyalty_campaign')
+                            <li>
+                              <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#delete_campaign{{ $campaign->id }}">
+                                <i class="fas fa-trash-alt"></i> {{ __('back.delete') }}
+                              </a>
+                            </li>
+                          @endcan
 
-                      @can('show_loyalty_campaign')
-                        <a href="{{ route('admin.loyalty_campaigns.show', $campaign->id) }}"
-                          class="btn btn-dark btn-xs ml-1">
-                          <i class="fas fa-eye"></i>
-                        </a>
-                      @endcan
+                          @can('show_loyalty_campaign')
+                            <li>
+                              <a class="dropdown-item" href="{{ route('admin.loyalty_campaigns.show', $campaign->id) }}">
+                                <i class="fas fa-eye text-dark"></i> {{ __('back.show') }}
+                              </a>
+                            </li>
+                          @endcan
 
-                      <a href="{{ route('loyalty.campaign.landing', $campaign->id) }}" target="_blank"
-                        class="btn btn-info btn-xs ml-1">
-                        <i class="fas fa-external-link-alt"></i>
-                      </a>
+                          <li>
+                            <a class="dropdown-item" href="{{ route('loyalty.campaign.landing', $campaign->slug) }}" target="_blank">
+                              <i class="fas fa-external-link-alt text-info"></i> {{ __('back.landing_page') }}
+                            </a>
+                          </li>
 
-                      @can('send_loyalty_campaign')
-                        <a href="{{ route('admin.loyalty_campaigns.send', $campaign->id) }}"
-                          class="btn btn-warning btn-xs ml-1">
-                          <i class="fas fa-paper-plane"></i>
-                        </a>
-                      @endcan
+                          @can('send_loyalty_campaign')
+                            <li>
+                              <a class="dropdown-item" href="{{ route('admin.loyalty_campaigns.send', $campaign->id) }}">
+                                <i class="fas fa-paper-plane text-warning"></i> {{ __('back.send_campaign') }}
+                              </a>
+                            </li>
+                            {{-- <li>
+                              <a class="dropdown-item" href="{{ route('loyalty_campaigns.test-whatsapp', $campaign->id) }}">
+                                <i class="fas fa-paper-plane text-warning"></i> {{ __('back.send_test_whatsapp') }}
+                              </a>
+                            </li> --}}
+                          @endcan
 
-                      @can('send_loyalty_campaign')
-                        <a href="{{ route('loyalty_campaigns.test-whatsapp', $campaign->id) }}"
-                          class="btn btn-warning btn-xs ml-1">
-                          <i class="fas fa-paper-plane"></i>oooooooo
-                        </a>
-                      @endcan
-
-                      <a href="{{ route('admin.loyalty_campaign_recipients.index', ['campaign_id' => $campaign->id]) }}" 
-                        class="btn btn-info">
-                        <i class="fas fa-users"></i> عرض المستقبلين
-                     </a>
+                          <li>
+                            <a class="dropdown-item" href="{{ route('admin.loyalty_campaign_recipients.index', ['campaign_id' => $campaign->id]) }}">
+                              <i class="fas fa-users text-info"></i> عرض المستقبلين
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
                     </td>
                   </tr>
                   @include('backend.pages.loyalty_campaigns.delete')
@@ -208,14 +282,56 @@
   </div>
 
   <!-- Export Button -->
-  <div class="row mt-3">
+  {{-- <div class="row mt-3">
     <div class="col-12">
       <button id="export-selected" class="btn btn-primary" disabled>
         <i class="fas fa-download"></i> {{ __('back.export_campaigns') }}
       </button>
     </div>
-  </div>
+  </div> --}}
 @endsection
+
+@push('styles')
+<style>
+  .border-right-primary {
+    border-right: 0.25rem solid #4e73df !important;
+  }
+  .border-right-success {
+    border-right: 0.25rem solid #1cc88a !important;
+  }
+  .border-right-info {
+    border-right: 0.25rem solid #36b9cc !important;
+  }
+  .border-right-warning {
+    border-right: 0.25rem solid #f6c23e !important;
+  }
+  .border-right-danger {
+    border-right: 0.25rem solid #e74a3b !important;
+  }
+  .text-gray-300 {
+    color: #dddfeb !important;
+  }
+  .text-gray-800 {
+    color: #5a5c69 !important;
+  }
+  .card {
+    transition: transform 0.2s ease-in-out;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+  .text-xs {
+    font-size: 0.7rem;
+  }
+  .font-weight-bold {
+    font-weight: 700 !important;
+  }
+  .text-uppercase {
+    text-transform: uppercase !important;
+  }
+</style>
+@endpush
 
 @push('scripts')
   <script>

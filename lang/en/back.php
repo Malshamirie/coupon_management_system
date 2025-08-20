@@ -2330,6 +2330,8 @@ return [
     'loyalty_card_status_approved' => 'Approved',
     'loyalty_card_status_rejected' => 'Rejected',
     'loyalty_card_status_delivered' => 'Delivered',
+    'loyalty_card_status_processing' => 'Processing',
+    'loyalty_card_status_completed' => 'Completed',
     'loyalty_card_request_submitted' => 'Loyalty card request submitted successfully',
     'loyalty_card_request_updated' => 'Loyalty card request updated successfully',
     'loyalty_card_request_deleted' => 'Loyalty card request deleted successfully',

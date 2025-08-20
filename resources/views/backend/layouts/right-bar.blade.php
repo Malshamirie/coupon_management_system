@@ -120,21 +120,43 @@
         <li> <a> <span class="" style="font-size: 15px; color: #8f8e8e;"> {{ trans('back.section_loyalty_campaigns') }} </span> </a> </li>
 
 
-                @can('loyalty_containers')
-                  <li><a
-                      href="{{ route('admin.loyalty_containers.index') }}"><span>{{ trans('back.loyalty_containers') }}</span></a>
-                  </li>
-                @endcan
-                @can('loyalty_cards')
-                  <li><a
-                      href="{{ route('admin.loyalty_cards.index') }}"><span>{{ trans('back.loyalty_cards') }}</span></a>
-                  </li>
-                @endcan
+                {{-- ترتيب القائمة حسب الأولوية --}}
+
+                {{-- 1. حملات الولاء --}}
                 @can('loyalty_campaigns')
-                  <li><a
-                      href="{{ route('admin.loyalty_campaigns.index') }}"><span>{{ trans('back.loyalty_campaigns') }}</span></a>
+                  <li>
+                    <a href="{{ route('admin.loyalty_campaigns.index') }}">
+                      <span>{{ trans('back.loyalty_campaigns') }}</span>
+                    </a>
                   </li>
                 @endcan
+
+                {{-- 2. حاويات الولاء --}}
+                @can('loyalty_containers')
+                  <li>
+                    <a href="{{ route('admin.loyalty_containers.index') }}">
+                      <span>{{ trans('back.loyalty_containers') }}</span>
+                    </a>
+                  </li>
+                @endcan
+
+                {{-- 3. بطاقات الولاء --}}
+                @can('loyalty_cards')
+                  <li>
+                    <a href="{{ route('admin.loyalty_cards.index') }}">
+                      <span>{{ trans('back.loyalty_cards') }}</span>
+                    </a>
+                  </li>
+                @endcan
+
+                {{-- 4. طلبات بطاقات الولاء --}}
+                <li>
+                  <a href="{{ route('admin.loyalty_card_requests.index') }}">
+                    <span>{{ trans('back.loyalty_card_requests') }}</span>
+                  </a>
+                </li>
+
+                {{-- 5. مستقبلو الحملات --}}
                 {{-- @can('loyalty_campaign_recipients') --}}
                   <li>
                     <a href="{{ route('admin.loyalty_campaign_recipients.index') }}">
@@ -143,22 +165,40 @@
                   </li>
                 {{-- @endcan --}}
 
-                <li>
-                  <a href="{{ route('admin.loyalty_card_requests.index') }}">
-                    <span>{{ trans('back.loyalty_card_requests') }}</span>
-                  </a>
-                </li>
-                @can('cities')
-                  <li><a href="{{ route('admin.cities.index') }}"><span>{{ trans('back.cities') }}</span></a></li>
-                @endcan
-                @can('groups')
-                  <li><a href="{{ route('admin.groups.index') }}"><span>{{ trans('back.groups') }}</span></a></li>
-                @endcan
-                @can('branches')
-                  <li><a href="{{ route('admin.branches.index') }}"><span>{{ trans('back.branches') }}</span></a></li>
-                @endcan
+                {{-- 6. العملاء --}}
                 @can('customers')
-                  <li><a href="{{ route('admin.customers.index') }}"><span>{{ trans('back.customers') }}</span></a></li>
+                  <li>
+                    <a href="{{ route('admin.customers.index') }}">
+                      <span>{{ trans('back.customers') }}</span>
+                    </a>
+                  </li>
+                @endcan
+
+                {{-- 7. الفروع --}}
+                @can('branches')
+                  <li>
+                    <a href="{{ route('admin.branches.index') }}">
+                      <span>{{ trans('back.branches') }}</span>
+                    </a>
+                  </li>
+                @endcan
+
+                {{-- 8. المجموعات --}}
+                @can('groups')
+                  <li>
+                    <a href="{{ route('admin.groups.index') }}">
+                      <span>{{ trans('back.groups') }}</span>
+                    </a>
+                  </li>
+                @endcan
+
+                {{-- 9. المدن --}}
+                @can('cities')
+                  <li>
+                    <a href="{{ route('admin.cities.index') }}">
+                      <span>{{ trans('back.cities') }}</span>
+                    </a>
+                  </li>
                 @endcan
              
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Container;
 use App\Models\LoyaltyCard;
+use App\Models\LoyaltyCardRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LoyaltyCampaign;
@@ -65,7 +66,27 @@ class LoyaltyCampaignController extends Controller
         $loyaltyCards = LoyaltyCard::all();
         $loyaltyContainers = LoyaltyContainer::where('is_active', true)->get();
 
-        return view('backend.pages.loyalty_campaigns.index', compact('campaigns', 'loyaltyCards', 'loyaltyContainers'));
+        // إحصائيات حملات الولاء
+        $statistics = [
+            'total_campaigns' => LoyaltyCampaign::count(),
+            'active_campaigns' => LoyaltyCampaign::where('start_date', '<=', now())
+                ->where('end_date', '>=', now())->count(),
+            'upcoming_campaigns' => LoyaltyCampaign::where('start_date', '>', now())->count(),
+            'expired_campaigns' => LoyaltyCampaign::where('end_date', '<', now())->count(),
+            'total_requests' => LoyaltyCardRequest::count(),
+            'pending_requests' => LoyaltyCardRequest::where('status', 'pending')->count(),
+            'approved_requests' => LoyaltyCardRequest::where('status', 'approved')->count(),
+            'rejected_requests' => LoyaltyCardRequest::where('status', 'rejected')->count(),
+            'total_customers' => Customer::count(),
+            'customers_in_loyalty' => Customer::whereNotNull('loyalty_container_id')->count(),
+            'total_loyalty_containers' => LoyaltyContainer::where('is_active', true)->count(),
+            'total_loyalty_cards' => LoyaltyCard::where('is_active', true)->count(),
+            'requests_this_month' => LoyaltyCardRequest::whereMonth('created_at', now()->month)->count(),
+            'requests_this_week' => LoyaltyCardRequest::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
+            'requests_today' => LoyaltyCardRequest::whereDate('created_at', now()->toDateString())->count(),
+        ];
+
+        return view('backend.pages.loyalty_campaigns.index', compact('campaigns', 'loyaltyCards', 'loyaltyContainers', 'statistics'));
     }
 
     public function create()
@@ -260,6 +281,12 @@ class LoyaltyCampaignController extends Controller
         return view('frontend.pages.loyalty_campaign_landing', compact('campaign'));
     }
 
+    public function successPage($campaignId)
+    {
+        $campaign = LoyaltyCampaign::where('slug', $campaignId)->first();
+        return view('frontend.pages.loyalty_campaign_success', compact('campaign'));
+    }
+
     public function showTestWhatsApp(LoyaltyCampaign $loyaltyCampaign)
     {
         return view('backend.pages.loyalty_campaigns.test_whatsapp', compact('loyaltyCampaign'));
@@ -279,7 +306,7 @@ class LoyaltyCampaignController extends Controller
         }
 
         // استخدام رابط عام بدلاً من الرابط المحلي
-        $landingPageUrl = $this->getLandingPageUrl($loyaltyCampaign->id);
+        $landingPageUrl = $loyaltyCampaign->campaign_name;
 
         $variables = [];
         if ($imageUrl) $variables[] = $imageUrl;
