@@ -195,8 +195,21 @@ class CustomerController extends Controller
             ]);
 
             $hasHeaders = ($request->file_type === 'with_headers');
+            
+            // إعادة تعيين مؤشر الملف
+            $request->file('file')->reset();
+            
             Excel::import(new CustomersImport($request->loyalty_container_id, $hasHeaders), $request->file('file'));
             toast('تم استيراد العملاء بنجاح', 'success');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            
+            foreach ($failures as $failure) {
+                $errorMessages[] = 'الصف ' . ($failure->row() - 1) . ': ' . implode(', ', $failure->errors());
+            }
+            
+            toast('أخطاء في الاستيراد: ' . implode(' | ', $errorMessages), 'error');
         } catch (\Exception $e) {
             \Log::error('Import Error', [
                 'message' => $e->getMessage(),

@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\Importable;
 
-class CustomersImport implements ToModel, WithValidation, SkipsOnError
+class CustomersImport implements ToModel, SkipsOnError
 {
   use Importable;
 
@@ -43,6 +43,15 @@ class CustomersImport implements ToModel, WithValidation, SkipsOnError
       return null;
     }
 
+    // التحقق من البيانات قبل الإدراج
+    if (empty($name)) {
+      throw new \Exception('الاسم مطلوب في الصف: ' . json_encode($row));
+    }
+
+    if (empty($phone)) {
+      throw new \Exception('رقم الهاتف مطلوب في الصف: ' . json_encode($row));
+    }
+
     return new Customer([
       'name' => $name,
       'phone' => $phone,
@@ -50,29 +59,6 @@ class CustomersImport implements ToModel, WithValidation, SkipsOnError
       'address' => !empty($address) ? $address : null,
       'loyalty_container_id' => $this->containerId,
     ]);
-  }
-
-  public function rules(): array
-  {
-    return [
-      'name' => 'required|string|max:255',
-      'phone' => 'required|string|max:255',
-      'email' => 'nullable|email|max:255',
-    ];
-  }
-
-  public function customValidationMessages()
-  {
-    return [
-      'name.required' => 'الاسم مطلوب',
-      'name.string' => 'الاسم يجب أن يكون نص',
-      'name.max' => 'الاسم يجب أن لا يتجاوز 255 حرف',
-      'phone.required' => 'رقم الهاتف مطلوب',
-      'phone.string' => 'رقم الهاتف يجب أن يكون نص',
-      'phone.max' => 'رقم الهاتف يجب أن لا يتجاوز 255 حرف',
-      'email.email' => 'البريد الإلكتروني غير صحيح',
-      'email.max' => 'البريد الإلكتروني يجب أن لا يتجاوز 255 حرف',
-    ];
   }
 
   public function onError(\Throwable $e)
