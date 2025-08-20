@@ -208,7 +208,7 @@
                       <br>
 
                       <a href="{{ route('admin.customers.index', ['loyalty_container_id' => $campaign->loyalty_container_id]) }}">
-                       {{ __('back.customers') }}  ({{ $campaign->loyaltyContainer->customers_count }})
+                       {{ __('back.customers') }}  ({{ $campaign->loyaltyContainer->customers_count ?? 0 }})
                       </a>
                     </td>
                     <td>{{ $campaign->created_at }}</td>
